@@ -33,8 +33,10 @@ export interface SpotifyAlbumSearchResult {
   id: string;
   title: string;
   artist_name: string;
+  artist_id: string; 
   image_url: string;
   release_date: string;
+  release_type: 'album' | 'single' | 'ep'; // 
 }
 
 // função pública para pesquisar álbuns no Spotify
@@ -66,8 +68,11 @@ export async function searchSpotifyAlbums(query: string): Promise<SpotifyAlbumSe
       id: item.id,
       title: item.name,
       artist_name: item.artists[0]?.name || 'Artista Desconhecido',
+      artist_id: item.artists[0]?.id || '',
       image_url: item.images[0]?.url || 'https://placehold.co/300',
       release_date: item.release_date,
+      // garante correspondência com o Enum do banco
+      release_type: item.album_type === 'single' ? 'single' : 'album', 
     }));
   } catch (error) {
     console.error('Erro ao pesquisar álbuns:', error);
